@@ -13,20 +13,19 @@ class Solution {
         ListNode head = new ListNode();
         ListNode current = head;
         int carryOver = 0;
-        while(l1 != null || l2 != null || carryOver != 0){
-            int val1 = 0, val2 = 0;
-            if( l1 != null)
-                val1 = l1.val;
-            if(l2 != null) 
-                val2 = l2.val;
+        while( l1 != null || l2 != null || carryOver != 0){
+            int val1 = 0;
+            int val2 = 0;
+            if( l1 != null) val1 = l1.val;
+            if( l2 != null) val2 = l2.val;
             int sum = val1 + val2 + carryOver;
             
-            carryOver = sum/10;
-            current.next = new ListNode( sum % 10);
+            carryOver = sum / 10;
+            current.next = new ListNode(sum % 10);
             
             current = current.next;
             if(l1 != null) l1 = l1.next;
-            if( l2 != null) l2 = l2.next;
+            if(l2 != null) l2 = l2.next;
         }
         return head.next;
         
