@@ -1,6 +1,7 @@
 class Solution {
 public:
     void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        //brute force approach
         // Pointers for nums1 and nums2, starting from the end of valid elements
         int i = m - 1;  // Last valid element in nums1
         int j = n - 1;  // Last element in nums2
