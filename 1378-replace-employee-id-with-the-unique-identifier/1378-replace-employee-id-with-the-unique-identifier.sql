@@ -1,5 +1,5 @@
-SELECT e.name, en.unique_id
-FROM Employees as e
-LEFT JOIN EmployeeUNI as en
-ON e.id = en.id;
+SELECT eu.unique_id, e.name
+FROM Employees as e 
+LEFT JOIN EmployeeUNI as eu
+ON e.id = eu.id
 
