@@ -1,6 +1,3 @@
-#include <vector>
-#include <algorithm>
-using namespace std;
 
 class Solution {
 public:
@@ -11,19 +8,19 @@ public:
         if (1LL * m * k > n) return -1;  // Use 1LL to prevent overflow
 
         // Find the minimum and maximum days from bloomDay
-        int l = *min_element(bloomDay.begin(), bloomDay.end());
-        int r = *max_element(bloomDay.begin(), bloomDay.end());
+        int low = *min_element(bloomDay.begin(), bloomDay.end());
+        int high = *max_element(bloomDay.begin(), bloomDay.end());
 
         // Binary search to find the minimum day
-        while (l < r) {
-            int mid = l + (r - l) / 2;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
             if (getBouquetCount(bloomDay, k, mid) >= m)
-                r = mid;  // We try for earlier days
+                high = mid;  // We try for earlier days
             else
-                l = mid + 1;  // We try for later days
+                low = mid + 1;  // We try for later days
         }
 
-        return l;
+        return low;
     }
 
 private:
