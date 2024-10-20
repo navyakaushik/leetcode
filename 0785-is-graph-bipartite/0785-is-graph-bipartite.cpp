@@ -1,5 +1,6 @@
 class Solution {
 public:
+
     bool checkBipartiteDFS(vector<vector<int>>& adj, int curr, vector<int>& color, int currColor) {
         color[curr] = currColor;  // Set the current node's color
         
@@ -14,6 +15,8 @@ public:
         }
         return true;
     }
+
+
 
     bool isBipartite(vector<vector<int>>& adj) {
         int V = adj.size();
