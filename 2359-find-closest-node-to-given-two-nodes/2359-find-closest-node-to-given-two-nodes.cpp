@@ -1,9 +1,7 @@
 class Solution {
 public:
     
-    int n;
-    
-    void dfs(vector<int>& edges, int node, vector<int>& dist_node, vector<bool>& visited){
+    void dfs(vector<int>& edges, int node,  vector<int>& dist_node, vector<bool>& visited){
         visited[node] = true;
         
         int v = edges[node];
@@ -16,9 +14,9 @@ public:
     }
     int closestMeetingNode(vector<int>& edges, int node1, int node2) {
         
-        n = edges.size();
+        int n = edges.size();
         
-        vector<int> dist1(n , INT_MAX);
+        vector<int> dist1(n, INT_MAX);
         vector<int> dist2(n, INT_MAX);
         
         vector<bool> visited1(n, false);
@@ -31,16 +29,15 @@ public:
         dfs(edges, node2, dist2, visited2);
         
         int minDistNode = -1;
-        int minDistanceTillNow = INT_MAX;
+        int minDistUpdated = INT_MAX;
         
         for(int i = 0; i < n; i++){
-            int maxD = max(dist1[i] , dist2[i]);
+            int maxDistance = max(dist1[i], dist2[i]);
             
-            if(minDistanceTillNow > maxD){
-                minDistanceTillNow = maxD;
+            if(minDistUpdated > maxDistance){
+                minDistUpdated = maxDistance;
                 minDistNode = i;
             }
-            
         }
         return minDistNode;   
     }
