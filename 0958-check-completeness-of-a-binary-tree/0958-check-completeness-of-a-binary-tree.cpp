@@ -15,7 +15,7 @@ public:
         
         //USING BFS 
         
-        queue<TreeNode*> que;
+       queue<TreeNode*> que;
         que.push(root);
         
         bool past = false;
@@ -23,7 +23,6 @@ public:
         while(!que.empty()){
             TreeNode* node = que.front();
             que.pop();
-            
             
             if(node == NULL){
                 past = true;
