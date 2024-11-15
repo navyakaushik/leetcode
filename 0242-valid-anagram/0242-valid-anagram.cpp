@@ -2,10 +2,22 @@ class Solution {
 public:
     bool isAnagram(string s, string t) {
         
-        sort(begin(s), end(s));
-        sort(begin(t), end(t));
+        vector<int> count(26, 0);
         
-        return s == t;
+        for(char &ch : s){
+            count[ch - 'a']++;
+        }
         
+        for(char &ch : t){
+            count[ch - 'a']--;
+        }
+        
+        //check if all elements in count are zero
+        //for loop
+        
+        bool allZeroes = all_of(begin(count), end(count), [](int element){
+            return element == 0;
+        });
+        return allZeroes;
     }
 };
