@@ -23,8 +23,7 @@ public:
             return max(nums[0], nums[1]);
 
         memset(t, -1, sizeof(t));
-        int take_0th_index_house = solve(nums, 0, n - 1); // Adjusted the range here
-
+        int take_0th_index_house = solve(nums, 0, n - 1); 
         memset(t, -1, sizeof(t));
         int take_1st_index_house = solve(nums, 1, n);
 
