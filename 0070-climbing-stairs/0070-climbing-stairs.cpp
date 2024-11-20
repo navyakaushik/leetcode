@@ -1,22 +1,24 @@
 class Solution {
 public:
+    int t[46];
+    
+    int solve(int n){
+        if(n < 0) return 0;
+        
+        if(t[n] != -1) // do not need to do recursion give it back 
+            return t[n];
+        
+        if( n == 0) return 1;  // we got one way to cover all stairs 
+        
+        int one_step = solve(n-1);
+        int two_step = solve(n-2);
+        
+        return t[n] = one_step + two_step;
+        
+    }
     int climbStairs(int n) {
-        
-        if(n == 1 || n == 2)
-            return n;
-        
-        int a = 1; int b = 2;
-        int c = 3;
-        
-        for(int i = 3; i <=n; i ++){
-            c = b+a;
-            
-            int temp_b = b;
-            
-            b = c;
-            a = temp_b;
-        }
-        return c;
+        memset(t, -1, sizeof(t));
+        return solve(n);
         
     }
 };
