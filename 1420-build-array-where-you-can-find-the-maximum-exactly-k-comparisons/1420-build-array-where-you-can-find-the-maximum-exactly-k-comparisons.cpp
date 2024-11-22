@@ -7,7 +7,10 @@ public:
     int solve(int idx, int searchCost, int maxSoFar) {
         if (idx == N) {
             // Base case: if we have constructed the full array, check if the searchCost matches K
-            return searchCost == K ? 1 : 0;
+            if (searchCost == K) {
+                return 1;
+            }
+            return 0;
         }
 
         // Check memoized result
