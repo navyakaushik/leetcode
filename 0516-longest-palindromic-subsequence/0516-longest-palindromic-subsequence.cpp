@@ -1,28 +1,26 @@
 class Solution {
 public:
-    
     int t[1001][1001];
     
-    
-    int LCS(string& s1, string& s2, int m, int n){
-        if(m == 0 || n == 0) 
-            return t[m][n] = 0;
+    int solve(string& s, int i, int j) {
+        // Base cases
+        if (i > j) return 0;
+        if (i == j) return 1;
         
-        if(t[m][n] != -1) 
-            return t[m][n];
+        // If already computed
+        if (t[i][j] != -1) return t[i][j];
         
-        if(s1[m-1] == s2[n-1])
-            return t[m][n] = 1 + LCS(s1, s2, m-1, n-1);
+        // If characters match, include both characters
+        if (s[i] == s[j]) {
+            return t[i][j] = 2 + solve(s, i + 1, j - 1);
+        }
         
-        return t[m][n] = max(LCS(s1, s2, m-1, n), LCS(s1, s2, m, n-1));
+        // If characters don't match, try excluding either character
+        return t[i][j] = max(solve(s, i + 1, j), solve(s, i, j - 1));
     }
     
     int longestPalindromeSubseq(string s) {
         memset(t, -1, sizeof(t));
-        string s2 = s;
-        reverse(begin(s2), end(s2));
-        int m = s.length();
-        
-        return LCS(s, s2, m, m);
+        return solve(s, 0, s.length() - 1);
     }
 };
