@@ -1,58 +1,46 @@
 class Solution {
 public:
-    vector<int> parent;
-    vector<int> rank;
-
-    // Find function with path compression
-    int find(int x) {
-        if (x == parent[x])
-            return x;
-        return parent[x] = find(parent[x]);  // Path compression
-    }
-
-    // Union function by rank
-    void Union(int x, int y) {
-        int x_parent = find(x);
-        int y_parent = find(y);
-
-        if (x_parent == y_parent)
-            return;
-
-        if (rank[x_parent] > rank[y_parent]) {
-            parent[y_parent] = x_parent;
-        } else if (rank[x_parent] < rank[y_parent]) {
-            parent[x_parent] = y_parent;
-        } else {
-            parent[x_parent] = y_parent;
-            rank[y_parent]++;
-        }
-    }
-
-    // Function to return the number of operations needed to connect all components
     int makeConnected(int n, vector<vector<int>>& connections) {
-        if (connections.size() < n - 1)  // Minimum connections required
+        // If there are not enough connections, return -1
+        if (connections.size() < n - 1) {
             return -1;
-
-        // Initialize parent and rank arrays
-        parent.resize(n);
-        rank.resize(n, 0);
-        
-        // Each node is its own parent initially
-        for (int i = 0; i < n; i++) {
-            parent[i] = i;
         }
 
-        int components = n;  // Initially, there are 'n' components
+        // adjacency list
+        vector<vector<int>> graph(n);
+        for (const auto& connection : connections) {
+            graph[connection[0]].push_back(connection[1]);
+            graph[connection[1]].push_back(connection[0]);
+        }
 
-        // Union all connected nodes
-        for (auto &vec : connections) {
-            if (find(vec[0]) != find(vec[1])) {
-                Union(vec[0], vec[1]);
-                components--;  // Reduce the number of components when two are merged
+        // number of connected components
+        vector<bool> visited(n, false);
+        int components = 0;
+
+        for (int i = 0; i < n; ++i) {
+            if (!visited[i]) {
+                components++;
+
+                // BFS
+                queue<int> q;
+                q.push(i);
+                visited[i] = true;
+
+                while (!q.empty()) {
+                    int curr = q.front();
+                    q.pop();
+
+                    for (int neighbor : graph[curr]) {
+                        if (!visited[neighbor]) {
+                            visited[neighbor] = true;
+                            q.push(neighbor);
+                        }
+                    }
+                }
             }
         }
 
-        // The number of extra edges needed is (components - 1)
+        // The minimum number of operations required to connect all components
         return components - 1;
     }
 };
