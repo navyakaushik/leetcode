@@ -1,46 +1,62 @@
 class Solution {
 public:
+    
+    vector<int> parent;
+    vector<int> rank;
+    
+    // to find the function with path compression
+    
+    int find(int x){
+        if(x == parent[x]) return x;
+        return parent[x] = find(parent[x]);
+    }
+    
+    void Union(int x, int y){
+        int x_parent = find(x);
+        int y_parent = find(y);
+        
+        if(x_parent  == y_parent) return;
+        
+        if(rank[x_parent] > rank[y_parent]){
+            parent[y_parent] = x_parent;
+        }
+            
+        else if(rank[y_parent] < rank[x_parent]){
+            parent[x_parent] = y_parent;
+            
+        } else {
+            parent[x_parent] = y_parent;
+            rank[y_parent]++;
+        }
+      
+    }
+    
+    //function to return the number of operations needed to connect all components
     int makeConnected(int n, vector<vector<int>>& connections) {
-        // If there are not enough connections, return -1
-        if (connections.size() < n - 1) {
-            return -1;
+        
+        if(connections.size() < n - 1) return -1;
+        
+        //initialize parent and rank arrays
+        parent.resize(n);
+        rank.resize(n, 0);
+        
+        //each node is its own parent initially
+        for(int i = 0; i < n; i++){
+            parent[i] = i;
         }
-
-        // adjacency list
-        vector<vector<int>> graph(n);
-        for (const auto& connection : connections) {
-            graph[connection[0]].push_back(connection[1]);
-            graph[connection[1]].push_back(connection[0]);
-        }
-
-        // number of connected components
-        vector<bool> visited(n, false);
-        int components = 0;
-
-        for (int i = 0; i < n; ++i) {
-            if (!visited[i]) {
-                components++;
-
-                // BFS
-                queue<int> q;
-                q.push(i);
-                visited[i] = true;
-
-                while (!q.empty()) {
-                    int curr = q.front();
-                    q.pop();
-
-                    for (int neighbor : graph[curr]) {
-                        if (!visited[neighbor]) {
-                            visited[neighbor] = true;
-                            q.push(neighbor);
-                        }
-                    }
-                }
+        
+        //initially there are n components
+        int components = n;
+        
+        //union all the connected nodes
+        for(auto &vec : connections){
+            if(find(vec[0]) != find(vec[1])){
+                Union(vec[0], vec[1]);
+                components--;  // reduce number of components when two are merged
             }
         }
-
-        // The minimum number of operations required to connect all components
+        
+        //the number of extra edges needed
         return components - 1;
     }
 };
