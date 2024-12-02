@@ -1,9 +1,9 @@
-
 class Solution {
 public:
-
     bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
-      //adjacency list
+        
+        //adjacency list 
+        
         unordered_map<int, vector<int>> mp;
         
         for(vector<int> &edge : edges){
@@ -12,8 +12,8 @@ public:
             
             mp[u].push_back(v);
             mp[v].push_back(u);
-            
         }
+        
         vector<bool> visited(n, false);
         
         queue<int> que;
@@ -26,13 +26,14 @@ public:
             
             if(node == destination) return true;
             
-            for(auto &V : mp[node]){
+            for(auto& V : mp[node]){
                 if(!visited[V]){
                     que.push(V);
-                    visited[V]=true;
+                    visited[V] = true;
                 }
             }
         }
         return false;
+        
     }
 };
