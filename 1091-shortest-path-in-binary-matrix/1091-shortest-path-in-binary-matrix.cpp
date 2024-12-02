@@ -1,50 +1,50 @@
 class Solution {
 public:
-    vector<vector<int>> directions{{1, 1}, {0, 1}, {1, 0}, {-1, 0}, {0, -1}, {-1, -1}, {1, -1}, {-1, 1}};
-    typedef pair<int, pair<int, int>> P;
+    vector<vector<int>> directions{{1, 1}, {0, 1}, {1, 0}, {-1, -1}, {-1, 0}, {0, -1}, {1, -1}, {-1, 1}};
 
     int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
-        int m = grid.size();
-        int n = grid[0].size();
+        int n = grid.size();
+        int m = grid[0].size();
 
-        // Check for empty grid or blocked starting cell
-        if (m == 0 || n == 0 || grid[0][0] != 0)
+        // If the grid is empty or the starting point is blocked, return -1
+        if (n == 0 || m == 0 || grid[0][0] != 0) 
             return -1;
 
-        auto isSafe = [&](int x, int y) {
-            return x >= 0 && x < m && y >= 0 && y < n;
-        };
+        queue<pair<int, int>> q;
 
-        vector<vector<int>> result(m, vector<int>(n, INT_MAX));
-        priority_queue<P, vector<P>, greater<P>> pq;
+        // Start BFS from the top-left corner
+        q.push({0, 0});
+        int level = 0;
 
-        pq.push({0, {0, 0}});
-        result[0][0] = 1; // Start from level 1
+        while (!q.empty()) {
+            int N = q.size(); // Number of nodes at the current level
 
-        while (!pq.empty()) {
-            int d = pq.top().first;
-            pair<int, int> node = pq.top().second;
-            pq.pop();
+            while (N--) {
+                auto curr = q.front();
+                int x = curr.first;
+                int y = curr.second;
+                q.pop();
 
-            int x = node.first;
-            int y = node.second;
+                // If we've reached the bottom-right corner, return the distance
+                if (x == n - 1 && y == m - 1) 
+                    return (level + 1);
 
-            if (x == m - 1 && y == n - 1) // If reached the end
-                return d + 1;
+                // Explore all 8 possible directions
+                for (auto& dir : directions) {
+                    int x_new = x + dir[0];
+                    int y_new = y + dir[1];
 
-            for (auto dir : directions) {
-                int x_ = x + dir[0];
-                int y_ = y + dir[1];
-                int dist = 1;
-
-                if (isSafe(x_, y_) && grid[x_][y_] == 0 && d + dist < result[x_][y_]) {
-                    pq.push({d + dist, {x_, y_}});
-                    result[x_][y_] = d + dist;
+                    // Check boundaries and ensure the cell is walkable
+                    if (x_new >= 0 && x_new < n && y_new >= 0 && y_new < m && grid[x_new][y_new] == 0) {
+                        q.push({x_new, y_new});
+                        grid[x_new][y_new] = 1; // Mark the cell as visited
+                    }
                 }
             }
+            level++;
         }
 
-        // If destination is unreachable
+        // If no path is found, return -1
         return -1;
     }
 };
