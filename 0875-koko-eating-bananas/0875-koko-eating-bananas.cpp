@@ -1,41 +1,32 @@
 class Solution {
 public:
-    int findMax(vector<int>& piles){
-        int maxi = INT_MIN;
-        int n = piles.size();
-        //maximum pile size
-        for(int i = 0; i < n; i++){
-            maxi = max(maxi, piles[i]);
-        }
-        return maxi;
-    }
-    long long calculateTotalHours(vector<int>& piles, int k) {
-        long long totalH = 0;
-        int n = piles.size();
-        // total hours needed at a given rate
-        for(int i = 0; i < n; i++){
-            totalH += ceil((double)piles[i] / (double)k);
-        }
-        return totalH;
-    }
-    int minEatingSpeed(vector<int>& piles, int h){
-        int low = 1;
-        int high = findMax(piles); //binary search bounds
+    
+    bool canEatAll(vector<int>&piles, int givenHour, int h){
+        int actualHour =0;
         
-        
-        //binary serach to find maximum rate k
-        while(low <= high){
-            int mid = (low + high) / 2;
-            long long totalH = calculateTotalHours(piles,mid);
+        for(int &x : piles){
+            actualHour += x/givenHour;
             
-            if(totalH <= h){
-                // if koko can eat all bananas within h hours try a smaller rate 
-                high = mid - 1;
+            if(x % givenHour != 0) actualHour ++;
+        }
+        return actualHour <= h;
+    }
+    
+    int minEatingSpeed(vector<int>& piles, int h){
+        int n = piles.size();
+        
+        int l = 1;
+        int r = *max_element(begin(piles), end(piles));
+        
+        while(l < r){
+            int mid = l + (r-l)/2;
+            
+            if(canEatAll(piles, mid, h)){
+                r = mid;
             }else{
-                //otherwise increase the rate to eat faster
-                low = mid + 1;
+                l = mid+1;
             }
         }
-        return low; // minimum rate k
+        return l;
     }
 };
