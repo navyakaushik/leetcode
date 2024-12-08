@@ -9,7 +9,6 @@ public:
         
         for(int &num : nums){
             pq.push(num);
-            
             if(pq.size() > k) pq.pop();
         }
         
@@ -18,9 +17,7 @@ public:
     int add(int val) {
         pq.push(val);
         if(pq.size() > K) pq.pop();
-        
         return pq.top();
-        
     }
 };
 
