@@ -8,28 +8,31 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-
 class Solution {
 public:
-    bool isPalindrome(ListNode* head){
-        if(head == NULL || head->next == NULL)
-            return head;
-            
-            ListNode* temp = head;
-            stack<int> st;
-            
-            while(temp!=NULL){
-                st.push(temp->val);
-                temp=temp->next;
-            }
-            
-            ListNode* temp1=head;
-            
-            while(temp1!=NULL){
-                if(st.top()!=temp1->val) return false;
-                st.pop();
-                temp1=temp1->next;
-            }
-            return true;
+    bool isPalindrome(ListNode* head) {
+        stack<int>st;
+        
+        //initialize temporary pointer
+        ListNode* temp = head;
+        
+        // traverse and push values into the stack
+        
+        while(temp != NULL){
+            //push data from current npde to stack
+            st.push(temp->val);
+            temp = temp->next;
         }
+        temp = head;
+        while(temp != NULL){
+            if(temp->val != st.top()){
+                return false;
+            }
+            st.pop();
+            temp = temp->next;
+        }
+        return true;
+        
+    }
 };
+
