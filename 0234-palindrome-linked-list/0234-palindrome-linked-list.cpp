@@ -10,29 +10,44 @@
  */
 class Solution {
 public:
-    bool isPalindrome(ListNode* head) {
-        stack<int>st;
-        
-        //initialize temporary pointer
-        ListNode* temp = head;
-        
-        // traverse and push values into the stack
-        
-        while(temp != NULL){
-            //push data from current npde to stack
-            st.push(temp->val);
-            temp = temp->next;
+    
+    ListNode* reverseLinkedList(ListNode* head){
+        if(head == NULL || head->next == NULL){
+            return head;
         }
-        temp = head;
-        while(temp != NULL){
-            if(temp->val != st.top()){
+        
+        ListNode* newHead = reverseLinkedList(head->next);
+        ListNode* front = head->next;
+        front->next = head;
+        head->next = NULL;
+        return newHead;
+    }
+    bool isPalindrome(ListNode* head) {
+        if(head == NULL || head->next == NULL){
+            return true;
+        }
+        
+        ListNode* slow = head;
+        ListNode* fast = head;
+        
+        while(fast -> next != NULL && fast->next->next != NULL){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        
+        ListNode* newHead = reverseLinkedList(slow->next);
+        ListNode* first = head;
+        ListNode* second = newHead;
+        
+        while(second != NULL){
+            if(first->val != second->val){
+                reverseLinkedList(newHead);
                 return false;
             }
-            st.pop();
-            temp = temp->next;
+            first = first->next;
+            second = second->next;
         }
+        reverseLinkedList(newHead);
         return true;
-        
     }
 };
-
