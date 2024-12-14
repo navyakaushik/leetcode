@@ -1,37 +1,25 @@
 class Solution {
 public:
-    int t[101];
-    int solve(int i, string &s, int &n) {
-        if(t[i] != -1) {
-            return t[i];
-        }
-
-        if(i == n) {
-            return t[i] = 1; //one valid split done
-        }
-
-        if(s[i] == '0') {
-            return t[i] = 0; //not possible to split
-        }
-
-        int result     = solve(i+1, s, n);
+    
+    int bottom_up_1(string&s, int n){
+        vector<int> t(n+1, 0);
+        t[n] = 1;
         
-        if(i+1 < n) {
-            if(s[i] == '1' || (s[i] == '2' && s[i+1] <= '6'))
-                result += solve(i+2, s, n);
+        for(int i = n-1; i >= 0; i--){
+            if(s[i] == '0') t[i] = 0;
+            else{
+                t[i] = t[i+1];
+                if(i < n-1 && (s[i] == '1' || (s[i] == '2' && s[i+1] < '7')))
+                    t[i] += t[i+2];
+            }
         }
-
-        
-        return t[i] = result;
-
+        return t[0];
     }
-
     int numDecodings(string s) {
         int n = s.length();
+        vector<int> t(n+1, -1);
         
-        memset(t, -1, sizeof(t));
-        return solve(0, s, n);
+        return bottom_up_1(s,n);
         
-
     }
 };
